@@ -1,7 +1,13 @@
 import DocutapCheckboxes from './components/docutap-checkboxes'
+import DocutapInput from './components/docutap-input'
+import DocutapRadio from './components/docutap-radio'
+import DocutapSelect from './components/docutap-select'
 
 const options = {
-  DocutapCheckboxes
+  DocutapCheckboxes,
+  DocutapInput,
+  DocutapRadio,
+  DocutapSelect
 }
 
 options.install = (Vue) => {
