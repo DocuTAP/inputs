@@ -13,6 +13,7 @@
 
 <script>
 export default {
+  $validates: true,
   data: () => ({
     visible: true
   }),
@@ -37,6 +38,7 @@ export default {
 }
 </script>
 
+<style src="vue-material/dist/vue-material.css"></style>
 <style>
 @charset "utf-8";
 
@@ -58,7 +60,7 @@ export default {
 }
 
 .test-dom-container {
-  font: initial;
+  font-size: 14px;
 }
 
 #mocha .test-dom-container--hidden {

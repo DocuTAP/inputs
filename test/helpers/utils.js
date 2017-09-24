@@ -1,7 +1,16 @@
 import Vue from 'vue/dist/vue.js'
+
 import Test from './Test.vue'
 
+import VeeValidate from 'vee-validate'
+import VueMaterial from 'vue-material'
+
+// Global dependencies
+Vue.use(VeeValidate)
+Vue.use(VueMaterial)
+
 Vue.config.productionTip = false
+
 const isKarma = !!window.__karma__
 
 export function createVM (context, template, opts = {}) {

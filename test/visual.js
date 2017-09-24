@@ -5,6 +5,17 @@ const mochaDiv = document.createElement('DIV')
 mochaDiv.id = 'mocha'
 document.body.appendChild(mochaDiv)
 
+const head = document.getElementsByTagName('head')[0];
+const link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = '//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic';
+head.appendChild(link);
+
+const link2 = document.createElement('link');
+link2.rel = 'stylesheet';
+link2.href = '//fonts.googleapis.com/icon?family=Material+Icons';
+head.appendChild(link2);
+
 import 'mocha/mocha.js'
 import sinon from 'sinon'
 import chai from 'chai'

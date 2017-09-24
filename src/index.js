@@ -1,21 +1,24 @@
-import Hello from './Hello.vue'
-import HelloJsx from './Hello.jsx'
+import DocutapCheckboxes from './components/docutap-checkboxes'
 
-function plugin (Vue) {
-  Vue.component('hello', Hello)
-  Vue.component('hello-jsx', HelloJsx)
+const options = {
+  DocutapCheckboxes
+}
+
+options.install = (Vue) => {
+  for (const component in options) {
+    const componentInstaller = options[component]
+
+    if (componentInstaller && component !== 'install') {
+      Vue.use(componentInstaller)
+    }
+  }
 }
 
 // Install by default if using the script tag
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(plugin)
+  window.Vue.use(options.install)
 }
 
-export default plugin
-const version = '__VERSION__'
-// Export all components too
-export {
-  Hello,
-  HelloJsx,
-  version
-}
+options.version = '__VERSION__'
+
+export default options
