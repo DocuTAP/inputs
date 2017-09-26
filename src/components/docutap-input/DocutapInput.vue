@@ -43,6 +43,9 @@ export default {
   methods: {
     onInput (input) {
       if (input.length) { this.touched = true }
+      this.$nextTick(() => {
+        this.$validator.validate(this.schema.name, this.model[this.schema.name])
+      })
     },
     onFocus () {
       this.isFocsed = true
