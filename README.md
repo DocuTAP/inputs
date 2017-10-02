@@ -1,4 +1,4 @@
-# DocuTAP Input
+# DocuTAP Inputs
 
 DocuTAP Input is a validation library built for [Vue.js](https://vuejs.org/) that build upon [DocuTAP UI](https://bitbucket.org/docutap/ui/overview)
 
