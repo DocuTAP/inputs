@@ -1,79 +1,76 @@
-# DocutapInput
+# DocuTAP Input
 
-[![npm](https://img.shields.io/npm/v/docutap-input.svg)](https://www.npmjs.com/package/docutap-input) [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+DocuTAP Input is a validation library built for [Vue.js](https://vuejs.org/) that build upon [DocuTAP UI](https://bitbucket.org/docutap/ui/overview)
 
-> A Vue.js Plugin
+## Features
+
+* Implements the [Vee Validate](https://github.com/baianat/vee-validate) validation library for Vue.js into [DocuTAP UI](https://bitbucket.org/docutap/ui/overview) componenets
+* Validations made easy! Just pass a validator object as show in the usage section below
+* Can be consumed via [DocuTAP Form](https://bitbucket.org/docutap/form) to avoid common boilerplate
 
 ## Installation
 
+DocuTAP Inputs only works with [DocuTAP UI](https://bitbucket.org/docutap/ui/overview) so you'll need to install it.
+
 ```bash
-npm install --save docutap-input
+npm install --save git+ssh://git@bitbucket.org/docutap/inputs.git#0ffc4b3
+npm install --save git+ssh://git@bitbucket.org/docutap/ui.git#25c74bc
 ```
+
+When updating the commit-ish from Bitbucket make sure to source from the [`dist` branch](https://bitbucket.org/docutap/inputs/branch/dist).
 
 ## Usage
 
-### Bundler (Webpack, Rollup)
+`main.js`
 
-```js
+```javascript
+import DocutapInputs from '@docutap/inputs'
+import DocutapUi from '@docutap/ui'
 import Vue from 'vue'
-import DocutapInput from 'docutap-input'
-// You need a specific loader for CSS files like https://github.com/webpack/css-loader
-import 'docutap-input/dist/docutap-input.css'
+import VeeValidate from 'vee-validate'
 
-Vue.use(DocutapInput)
+Vue.use(DocutapUi)
+Vue.use(DocutapInputs)
+Vue.use(VeeValidate)
 ```
 
-### Browser
+`App.vue`
 
 ```html
-<!-- Include after Vue -->
-<!-- Local files -->
-<link rel="stylesheet" href="docutap-input/dist/docutap-input.css"></link>
-<script src="docutap-input/dist/docutap-input.js"></script>
+<template>
+  <form novalidate @submit.prevent="validateBeforeSubmit">
+    <docutap-select :model="model" :schema="schema"></docutap-select>
+  </form>
+</template>
 
-<!-- From CDN -->
-<link rel="stylesheet" href="https://unpkg.com/docutap-input/dist/docutap-input.css"></link>
-<script src="https://unpkg.com/docutap-input"></script>
+<script>
+export default {
+  name: 'my-app',
+  inject: ['$validator'],
+  data () {
+    return {
+      model: {
+        'my-select-input': ''
+      },
+      schema: {
+        label: 'State',
+        name: 'my-select-input',
+        validator: 'required',
+        values: ['South Dakota', 'North Dakota', 'Alaska']
+      }
+    }
+  },
+  methods: {
+    validateBeforeSubmit () {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          console.log('Submitted')
+          return
+        }
+        console.log('Form not valid')
+      })
+    }
+  }
+}
+</script>
 ```
-
-## Development
-
-### Launch visual tests
-
-```bash
-npm run dev
-```
-
-### Launch Karma with coverage
-
-```bash
-npm run dev:coverage
-```
-
-### Build
-
-Bundle the js and css of to the `dist` folder:
-
-```bash
-npm run build
-```
-
-
-## Publishing
-
-The `prepublish` hook will ensure dist files are created before publishing. This
-way you don't need to commit them in your repository.
-
-```bash
-# Bump the version first
-# It'll also commit it and create a tag
-npm version
-# Push the bumped package and tags
-git push --follow-tags
-# Ship it 🚀
-npm publish
-```
-
-## License
-
-[MIT](http://opensource.org/licenses/MIT)
