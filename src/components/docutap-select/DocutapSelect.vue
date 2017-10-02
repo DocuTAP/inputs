@@ -1,7 +1,7 @@
 <template>
   <md-input-container :class="{'md-input-invalid': errors.has(schema.name)}">
-    <label v-if="schema.label">{{schema.label}} <span v-if="errors.has(schema.name)"> {{errors.items[0].rule === 'required' ? 'required' : 'not valid'}}</span></label>
-    <md-select v-validate="schema.validator" :name="schema.name" v-model="model[schema.name]">
+    <label v-if="schema.label">{{schema.label}} <span v-if="errors.has(schema.name)"> {{errors.items[0].rule === 'required' ? 'is required' : 'not valid'}}</span></label>
+    <md-select @input="onInput" v-validate="schema.validator" :name="schema.name" v-model="model[schema.name]">
       <md-option v-for="value in schema.values" :key="value" :value="value">{{value}}</md-option>
     </md-select>
   </md-input-container>
@@ -17,6 +17,13 @@ export default {
     },
     schema: {
       type: Object
+    }
+  },
+  methods: {
+    onInput () {
+      this.$nextTick(() => {
+        this.$validator.validate(this.schema.name, this.model[this.schema.name])
+      })
     }
   }
 }
