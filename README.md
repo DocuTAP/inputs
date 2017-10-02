@@ -1,6 +1,6 @@
 # DocuTAP Inputs
 
-DocuTAP Input is a validation library built for [Vue.js](https://vuejs.org/) that build upon [DocuTAP UI](https://bitbucket.org/docutap/ui/overview)
+DocuTAP Inputs is a validation library built for [Vue.js](https://vuejs.org/) that builds upon [DocuTAP UI](https://bitbucket.org/docutap/ui/overview)
 
 ## Features
 
@@ -10,9 +10,10 @@ DocuTAP Input is a validation library built for [Vue.js](https://vuejs.org/) tha
 
 ## Installation
 
-DocuTAP Inputs only works with [DocuTAP UI](https://bitbucket.org/docutap/ui/overview) so you'll need to install it.
+DocuTAP Inputs requires the following dependencies: [Vee Validate](https://github.com/baianat/vee-validate) and [DocuTAP UI](https://bitbucket.org/docutap/ui/overview).
 
 ```bash
+npm install --save vee-validate
 npm install --save git+ssh://git@bitbucket.org/docutap/inputs.git#0ffc4b3
 npm install --save git+ssh://git@bitbucket.org/docutap/ui.git#25c74bc
 ```
