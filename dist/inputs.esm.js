@@ -4,7 +4,7 @@
  * Released under the MIT License.
  */
 
-var DocutapCheckboxes = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"md-checkboxes-group",class:{'md-input-invalid': _vm.errors.has(_vm.schema.name)}},[(_vm.schema.label)?_c('div',{staticClass:"md-checkboxes-group-label"},[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.errors.has(_vm.schema.name))?_c('span',[_vm._v(_vm._s(_vm.errors.items[0].rule === 'required' ? 'required' : 'not valid'))]):_vm._e()]):_vm._e(),_vm._l((_vm.schema.values),function(value,key){return _c('md-checkbox',{key:value,attrs:{"name":((_vm.schema.name) + "-" + key)},on:{"change":_vm.onChange},model:{value:(_vm.model[_vm.schema.name][value]),callback:function ($$v) {_vm.$set(_vm.model[_vm.schema.name], value, $$v);},expression:"model[schema.name][value]"}},[_vm._v(_vm._s(value))])}),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.fauxInputValue),expression:"fauxInputValue"},{name:"validate",rawName:"v-validate",value:(_vm.schema.validator),expression:"schema.validator"}],attrs:{"type":"hidden","name":_vm.schema.name},domProps:{"value":(_vm.fauxInputValue)},on:{"input":function($event){if($event.target.composing){ return; }_vm.fauxInputValue=$event.target.value;}}})],2)},staticRenderFns: [],
+var DocutapCheckboxes = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"md-checkboxes-group",class:{'md-input-invalid': _vm.errors.has(_vm.schema.name)}},[(_vm.schema.label && (!_vm.schema.hideLabel || _vm.errors.has(_vm.schema.name)))?_c('div',{staticClass:"md-checkboxes-group-label"},[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.errors.has(_vm.schema.name))?_c('span',[_vm._v(_vm._s(_vm.errors.items[0].rule === 'required' ? 'is required' : 'not valid'))]):_vm._e()]):_vm._e(),_vm._l((_vm.schema.values),function(value,key){return _c('md-checkbox',{key:value,attrs:{"name":((_vm.schema.name) + "-" + key)},on:{"change":_vm.onChange},model:{value:(_vm.model[_vm.schema.name][value]),callback:function ($$v) {_vm.$set(_vm.model[_vm.schema.name], value, $$v);},expression:"model[schema.name][value]"}},[_vm._v(_vm._s(value))])}),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.fauxInputValue),expression:"fauxInputValue"},{name:"validate",rawName:"v-validate",value:(_vm.schema.validator),expression:"schema.validator"}],attrs:{"type":"hidden","name":_vm.schema.name},domProps:{"value":(_vm.fauxInputValue)},on:{"input":function($event){if($event.target.composing){ return; }_vm.fauxInputValue=$event.target.value;}}})],2)},staticRenderFns: [],
   name: 'docutap-checkboxes',
   inject: ['$validator'],
   props: {
@@ -37,7 +37,7 @@ function install (Vue) {
   Vue.component('docutap-checkboxes', DocutapCheckboxes);
 }
 
-var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('md-input-container',{class:{'md-input-invalid': _vm.errors.has(_vm.schema.name) && _vm.showingErrors}},[(_vm.schema.label)?_c('label',[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.error && _vm.showingErrors)?_c('span',[_vm._v(_vm._s(_vm.error.rule === 'required' ? 'required' : 'not valid'))]):_vm._e()]):_vm._e(),_c('md-input',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.validator),expression:"validator"}],attrs:{"phonePattern":_vm.schema.phonePattern,"name":_vm.schema.name,"type":_vm.schema.type},on:{"input":_vm.onInput},nativeOn:{"focus":function($event){_vm.onFocus($event);},"blur":function($event){_vm.onBlur($event);}},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}})],1)},staticRenderFns: [],
+var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('md-input-container',{class:{'md-input-invalid': _vm.errors.has(_vm.schema.name) && _vm.showingErrors}},[(_vm.schema.label)?_c('label',[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.error && _vm.showingErrors)?_c('span',[_vm._v(_vm._s(_vm.error.rule === 'required' ? 'is required' : 'not valid'))]):_vm._e()]):_vm._e(),_c('md-input',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.validator),expression:"validator"}],attrs:{"phonePattern":_vm.schema.phonePattern,"name":_vm.schema.name,"type":_vm.schema.type},on:{"input":_vm.onInput},nativeOn:{"focus":function($event){_vm.onFocus($event);},"blur":function($event){_vm.onBlur($event);}},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}})],1)},staticRenderFns: [],
   name: 'docutap-input',
   inject: ['$validator'],
   props: {
@@ -75,7 +75,12 @@ var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   },
   methods: {
     onInput: function onInput (input) {
+      var this$1 = this;
+
       if (input.length) { this.touched = true; }
+      this.$nextTick(function () {
+        this$1.$validator.validate(this$1.schema.name, this$1.model[this$1.schema.name]);
+      });
     },
     onFocus: function onFocus () {
       this.isFocsed = true;
@@ -102,7 +107,7 @@ function install$1 (Vue) {
   Vue.component('docutap-input', DocutapInput);
 }
 
-var DocutapRadio = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"md-radio-group",class:{'md-input-invalid': _vm.errors.has(_vm.schema.name)}},[(_vm.schema.label)?_c('div',{staticClass:"md-radio-group-label"},[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.errors.has(_vm.schema.name))?_c('span',[_vm._v(_vm._s(_vm.errors.items[0].rule === 'required' ? 'required' : 'not valid'))]):_vm._e()]):_vm._e(),_vm._l((_vm.schema.values),function(value,key){return _c('md-radio',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.radioValidator(key)),expression:"radioValidator(key)"}],key:value,attrs:{"md-value":value,"name":_vm.schema.name},on:{"change":_vm.onChange},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}},[_vm._v(_vm._s(value))])})],2)},staticRenderFns: [],
+var DocutapRadio = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"md-radio-group",class:{'md-input-invalid': _vm.errors.has(_vm.schema.name)}},[(_vm.schema.label)?_c('div',{staticClass:"md-radio-group-label"},[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.errors.has(_vm.schema.name))?_c('span',[_vm._v(_vm._s(_vm.errors.items[0].rule === 'required' ? 'is required' : 'not valid'))]):_vm._e()]):_vm._e(),_vm._l((_vm.schema.values),function(value,key){return _c('md-radio',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.radioValidator(key)),expression:"radioValidator(key)"}],key:value,attrs:{"md-value":value,"name":_vm.schema.name},on:{"change":_vm.onChange},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}},[_vm._v(_vm._s(value))])})],2)},staticRenderFns: [],
   name: 'docutap-radio',
   inject: ['$validator'],
   props: {
@@ -132,7 +137,7 @@ function install$2 (Vue) {
   Vue.component('docutap-radio', DocutapRadio);
 }
 
-var DocutapSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('md-input-container',{class:{'md-input-invalid': _vm.errors.has(_vm.schema.name)}},[(_vm.schema.label)?_c('label',[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.errors.has(_vm.schema.name))?_c('span',[_vm._v(_vm._s(_vm.errors.items[0].rule === 'required' ? 'required' : 'not valid'))]):_vm._e()]):_vm._e(),_c('md-select',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.schema.validator),expression:"schema.validator"}],attrs:{"name":_vm.schema.name},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}},_vm._l((_vm.schema.values),function(value){return _c('md-option',{key:value,attrs:{"value":value}},[_vm._v(_vm._s(value))])}))],1)},staticRenderFns: [],
+var DocutapSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('md-input-container',{class:{'md-input-invalid': _vm.errors.has(_vm.schema.name)}},[(_vm.schema.label)?_c('label',[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.errors.has(_vm.schema.name))?_c('span',[_vm._v(_vm._s(_vm.errors.items[0].rule === 'required' ? 'is required' : 'not valid'))]):_vm._e()]):_vm._e(),_c('md-select',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.schema.validator),expression:"schema.validator"}],attrs:{"name":_vm.schema.name},on:{"input":_vm.onInput},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}},_vm._l((_vm.schema.values),function(value){return _c('md-option',{key:value,attrs:{"value":value}},[_vm._v(_vm._s(value))])}))],1)},staticRenderFns: [],
   name: 'docutap-input',
   inject: ['$validator'],
   props: {
@@ -141,6 +146,15 @@ var DocutapSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     },
     schema: {
       type: Object
+    }
+  },
+  methods: {
+    onInput: function onInput () {
+      var this$1 = this;
+
+      this.$nextTick(function () {
+        this$1.$validator.validate(this$1.schema.name, this$1.model[this$1.schema.name]);
+      });
     }
   }
 };
