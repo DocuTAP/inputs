@@ -1,7 +1,7 @@
 <template>
   <md-input-container :class="{'md-input-invalid': errors.has(schema.name) && showingErrors}">
     <label v-if="schema.label">{{schema.label}} <span v-if="error && showingErrors"> {{error.rule === 'required' ? 'is required' : 'not valid'}}</span></label>
-    <md-input v-validate="validator" :disabled="schema.disabled" :phonePattern="schema.phonePattern" :name="schema.name" :type="schema.type" v-model="model[schema.name]" @input="onInput" @focus.native="onFocus" @blur.native="onBlur"></md-input>
+    <md-input :scope="schema.scope" v-validate="validator" :disabled="schema.disabled" :phonePattern="schema.phonePattern" :name="schema.name" :type="schema.type" v-model="model[schema.name]" @input="onInput" @focus.native="onFocus" @blur.native="onBlur" :placeholder="schema.placeholder"></md-input>
     <md-button v-if="schema.disabledButton" @click.native="schema.disabled = !schema.disabled" :fauxLink="true">{{schema.disabledButton}}</md-button>
   </md-input-container>
 </template>
@@ -47,6 +47,7 @@ export default {
       this.$nextTick(() => {
         this.$validator.validate(this.schema.name, this.model[this.schema.name])
       })
+      this.$emit('input', this.mdValue, input)
     },
     onFocus () {
       this.isFocsed = true

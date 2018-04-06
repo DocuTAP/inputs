@@ -19,10 +19,11 @@ export default {
     }
   },
   methods: {
-    onChange () {
+    onChange ($event) {
       setTimeout(() => {
         this.$validator.validate(this.schema.name, this.model[this.schema.name])
       })
+      this.$emit('change', this.mdValue, $event)
     },
     radioValidator (key) {
       if (key !== 0) { return '' }
