@@ -43,7 +43,7 @@ function install (Vue) {
   Vue.component('docutap-checkboxes', DocutapCheckboxes);
 }
 
-var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('md-input-container',{class:{'md-input-invalid': _vm.errors.has(_vm.schema.name) && _vm.showingErrors}},[(_vm.schema.label)?_c('label',[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.error && _vm.showingErrors)?_c('span',[_vm._v(_vm._s(_vm.error.rule === 'required' ? 'is required' : 'not valid'))]):_vm._e()]):_vm._e(),_c('md-input',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.validator),expression:"validator"}],attrs:{"scope":_vm.schema.scope,"disabled":_vm.schema.disabled,"phonePattern":_vm.schema.phonePattern,"name":_vm.schema.name,"type":_vm.schema.type,"placeholder":_vm.schema.placeholder},on:{"input":_vm.onInput},nativeOn:{"focus":function($event){_vm.onFocus($event);},"blur":function($event){_vm.onBlur($event);}},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}}),(_vm.schema.disabledButton)?_c('md-button',{attrs:{"fauxLink":true},nativeOn:{"click":function($event){_vm.schema.disabled = !_vm.schema.disabled;}}},[_vm._v(_vm._s(_vm.schema.disabledButton))]):_vm._e()],1)},staticRenderFns: [],
+var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('md-input-container',{class:{'md-input-invalid': _vm.errors.has(_vm.schema.name) && _vm.showingErrors}},[(_vm.schema.label)?_c('label',[_vm._v(_vm._s(_vm.schema.label)+" "),(_vm.error && _vm.showingErrors)?_c('span',[_vm._v(_vm._s(_vm.errorMessage(_vm.error)))]):_vm._e()]):_vm._e(),_c('md-input',{directives:[{name:"validate",rawName:"v-validate",value:(_vm.validator),expression:"validator"}],attrs:{"scope":_vm.schema.scope,"disabled":_vm.schema.disabled,"phonePattern":_vm.schema.phonePattern,"name":_vm.schema.name,"type":_vm.schema.type,"placeholder":_vm.schema.placeholder},on:{"input":_vm.onInput},nativeOn:{"focus":function($event){_vm.onFocus($event);},"blur":function($event){_vm.onBlur($event);}},model:{value:(_vm.model[_vm.schema.name]),callback:function ($$v) {_vm.$set(_vm.model, _vm.schema.name, $$v);},expression:"model[schema.name]"}}),(_vm.schema.disabledButton)?_c('md-button',{attrs:{"fauxLink":true},nativeOn:{"click":function($event){_vm.schema.disabled = !_vm.schema.disabled;}}},[_vm._v(_vm._s(_vm.schema.disabledButton))]):_vm._e()],1)},staticRenderFns: [],
   name: 'docutap-input',
   inject: ['$validator'],
   props: {
@@ -58,7 +58,7 @@ var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;va
       default: false
     }
   },
-  data: function data () {
+  data: function data() {
     return {
       validator: '',
       blured: false,
@@ -70,36 +70,68 @@ var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     // Show errors on blur
     // if the field that has been touched
     // or the submit button was pressed.
-    showingErrors: function showingErrors () {
-      return this.showErrors || (!this.isFocsed && this.touched)
+    showingErrors: function showingErrors() {
+      if (this.showErrors) {
+        return true
+      }
+
+      if (this.schema.showErrorsIfDirtyOrUnfocused) {
+        return this.touched || !this.isFocsed
+      }
+
+      return (
+        (!this.isFocsed || this.schema.showErrorsIfFocused) &&
+        (this.touched || this.schema.showErrorsIfPristine)
+      )
     },
-    error: function error () {
+    error: function error() {
       var this$1 = this;
 
       return this.errors.items.find(function (item) { return item.field === this$1.schema.name; })
     }
   },
   methods: {
-    onInput: function onInput (input) {
+    onInput: function onInput(input) {
+      if (input.length) {
+        this.touched = true;
+      }
+      this.validate();
+      this.$emit('input', this.mdValue, input);
+    },
+    onFocus: function onFocus() {
+      this.isFocsed = true;
+    },
+    onBlur: function onBlur(input) {
+      this.isFocsed = false;
+      this.blured = true;
+    },
+    validate: function validate() {
       var this$1 = this;
 
-      if (input.length) { this.touched = true; }
       this.$nextTick(function () {
         this$1.$validator.validate(this$1.schema.name, this$1.model[this$1.schema.name]);
       });
-      this.$emit('input', this.mdValue, input);
     },
-    onFocus: function onFocus () {
-      this.isFocsed = true;
-    },
-    onBlur: function onBlur (input) {
-      this.isFocsed = false;
-      this.blured = true;
+    errorMessage: function errorMessage(error) {
+      if (error.rule === 'required') {
+        return 'is required'
+      }
+
+      if (
+        this.schema.errorMessages !== undefined &&
+        error.rule in this.schema.errorMessages
+      ) {
+        return this.schema.errorMessages[error.rule]
+      }
+
+      return 'not valid'
     }
   },
-  mounted: function mounted () {
+  mounted: function mounted() {
     if (this.schema.type === 'tel') {
-      var phonePattern = this.schema.phonePattern ? this.schema.phonePattern.length : 'XXX-XXX-XXXX';
+      var phonePattern = this.schema.phonePattern
+        ? this.schema.phonePattern.length
+        : 'XXX-XXX-XXXX';
       var validators = this.schema.validator.split('|');
       validators.push(("min:" + (phonePattern.length)));
       validators.push(("max:" + (phonePattern.length)));
@@ -107,6 +139,7 @@ var DocutapInput = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     } else {
       this.validator = this.schema.validator;
     }
+    this.validate();
   }
 };
 
