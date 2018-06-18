@@ -143,7 +143,9 @@
       "condition-circle"
     ],
     "getLastRelease": "@semantic-release/git",
-    "verifyRelease": []
+    "verifyRelease": [
+      "semantic-commitlint"
+    ]
   },
   "publishConfig": {
     "tag": "latest",
