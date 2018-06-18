@@ -3,11 +3,11 @@ import Vue from 'vue/dist/vue.js'
 import Test from './Test.vue'
 
 import VeeValidate from 'vee-validate'
-import VueMaterial from 'vue-material'
+import DocutapUi from '@docutap-api'
 
 // Global dependencies
 Vue.use(VeeValidate)
-Vue.use(VueMaterial)
+Vue.use(DocutapUi)
 
 Vue.config.productionTip = false
 
@@ -24,8 +24,8 @@ Vue.prototype.$$ = function $$ (selector) {
   const els = document.querySelectorAll(selector)
   const vmEls = this.$el.querySelectorAll(selector)
   const fn = vmEls.length
-          ? el => vmEls.find(el)
-          : el => this.$el === el
+    ? el => vmEls.find(el)
+    : el => this.$el === el
   const found = Array.from(els).filter(fn)
   return found.length
     ? found
@@ -36,8 +36,8 @@ Vue.prototype.$ = function $ (selector) {
   const els = document.querySelectorAll(selector)
   const vmEl = this.$el.querySelector(selector)
   const fn = vmEl
-          ? el => el === vmEl
-          : el => el === this.$el
+    ? el => el === vmEl
+    : el => el === this.$el
   // Allow should chaining for tests
   return Array.from(els).find(fn) || emptyNodes
 }
@@ -45,9 +45,11 @@ Vue.prototype.$ = function $ (selector) {
 export function createKarmaTest (context, template, opts) {
   const el = document.createElement('div')
   document.getElementById('tests').appendChild(el)
-  const render = typeof template === 'string'
-          ? { template: `<div>${template}</div>` }
-          : { render: template }
+  const render = typeof template === 'string' ? {
+    template: `<div>${template}</div>`
+  } : {
+    render: template
+  }
   return new Vue({
     el,
     name: 'Test',
@@ -95,4 +97,7 @@ export function register (name, component) {
   Vue.component(name, component)
 }
 
-export { isKarma, Vue }
+export {
+  isKarma,
+  Vue
+}
